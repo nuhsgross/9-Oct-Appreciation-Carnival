@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>NUHS Digital Stamp Card</title>
+
+  <style>
+
+    body {
+
+      font-family: Arial, sans-serif;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      background-color: #f0f4f8;
+
+      padding: 20px;
+
+    }
+
+ 
+
+    h1 {
+
+      color: #003d7c; /* NUHS Blue */
+
+      margin-bottom: 10px;
+
+    }
+
+ 
+
+    .subtitle {
+
+      color: #555;
+
+      margin-bottom: 30px;
+
+      font-size: 14px;
+
+    }
+
+ 
+
+    .stamp-grid {
+
+      display: grid;
+
+      grid-template-columns: repeat(5, 80px);
+
+      gap: 15px;
+
+      margin-bottom: 30px;
+
+    }
+
+ 
+
+    .stamp {
+
+      width: 80px;
+
+      height: 80px;
+
+      border: 3px dashed #003d7c;
+
+      border-radius: 50%;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-size: 30px;
+
+      background-color: white;
+
+      cursor: pointer;
+
+      transition: all 0.3s ease;
+
+    }
+
+ 
+
+    .stamp.filled {
+
+      background-color: #003d7c;
+
+      border-style: solid;
+
+      transform: scale(1.05);
+
+    }
+
+ 
+
+    .buttons {
+
+      display: flex;
+
+      gap: 15px;
+
+    }
+
+ 
+
+    button {
+
+      padding: 12px 24px;
+
+      font-size: 16px;
+
+      border: none;
+
+      border-radius: 8px;
+
+      cursor: pointer;
+
+      transition: background 0.3s;
+
+    }
+
+ 
+
+    #addStamp {
+
+      background-color: #003d7c;
+
+      color: white;
+
+    }
+
+ 
+
+    #addStamp:hover { background-color: #002a57; }
+
+ 
+
+    #resetCard {
+
+      background-color: #e74c3c;
+
+      color: white;
+
+    }
+
+ 
+
+    #resetCard:hover { background-color: #c0392b; }
+
+ 
+
+    .progress {
+
+      margin-bottom: 20px;
+
+      font-size: 18px;
+
+      color: #333;
+
+      font-weight: bold;
+
+    }
+
+ 
+
+    .reward-message {
+
+      display: none;
+
+      background-color: #2ecc71;
+
+      color: white;
+
+      padding: 15px 30px;
+
+      border-radius: 10px;
+
+      font-size: 20px;
+
+      margin-bottom: 20px;
+
+      text-align: center;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+ 
+
+  <h1>⭐ NUHS Stamp Card</h1>
+
+  <p class="subtitle">Collect 10 stamps to earn your reward!</p>
+
+ 
+
+  <div class="reward-message" id="rewardMessage">
+
+    🎉 Congratulations! You've earned your reward!
+
+  </div>
+
+ 
+
+  <p class="progress" id="progressText">Stamps: 0 / 10</p>
+
+ 
+
+  <div class="stamp-grid" id="stampGrid"></div>
+
+ 
+
+  <div class="buttons">
+
+    <button id="addStamp">➕ Add Stamp</button>
+
+    <button id="resetCard">🔄 Reset Card</button>
+
+  </div>
+
+ 
+
+  <script>
+
+    const TOTAL_STAMPS = 10;
+
+    let stampCount = parseInt(localStorage.getItem('stampCount')) || 0;
+
+ 
+
+    function renderStamps() {
+
+      const grid = document.getElementById('stampGrid');
+
+      grid.innerHTML = '';
+
+ 
+
+      for (let i = 0; i < TOTAL_STAMPS; i++) {
+
+        const stamp = document.createElement('div');
+
+        stamp.classList.add('stamp');
+
+        if (i < stampCount) {
+
+          stamp.classList.add('filled');
+
+          stamp.textContent = '⭐';
+
+        } else {
+
+          stamp.textContent = '';
+
+        }
+
+        grid.appendChild(stamp);
+
+      }
+
+ 
+
+      document.getElementById('progressText').textContent =
+
+        `Stamps: ${stampCount} / ${TOTAL_STAMPS}`;
+
+ 
+
+      const reward = document.getElementById('rewardMessage');
+
+      reward.style.display = stampCount >= TOTAL_STAMPS ? 'block' : 'none';
+
+    }
+
+ 
+
+    document.getElementById('addStamp').addEventListener('click', () => {
+
+      if (stampCount < TOTAL_STAMPS) {
+
+        stampCount++;
+
+        localStorage.setItem('stampCount', stampCount);
+
+        renderStamps();
+
+      }
+
+    });
+
+ 
+
+    document.getElementById('resetCard').addEventListener('click', () => {
+
+      if (confirm('Reset your stamp card?')) {
+
+        stampCount = 0;
+
+        localStorage.setItem('stampCount', 0);
+
+        renderStamps();
+
+      }
+
+    });
+
+ 
+
+    renderStamps();
+
+  </script>
+
+ 
+
+</body>
+
+</html>
